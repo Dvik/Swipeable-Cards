@@ -452,13 +452,28 @@ public class CardContainer extends AdapterView<ListAdapter> {
                     mTopCard.setLayerType(LAYER_TYPE_HARDWARE, null);
 
                 if (cardModel.getOnCardDismissedListener() != null) {
-                    if ( targetX > 0 ) {
-                        cardModel.getOnCardDismissedListener().onLike();
-                    } else {
-                        cardModel.getOnCardDismissedListener().onDislike();
+                   if (targetX > 0 && (targetY < 1500 && targetY > -1500)) {
+                        cardModel.getOnCardDismissedListener().onLike(cardModel);
                     }
+                    else if (targetX < 0 && (targetY < 1500 && targetY > -1500)) {
+                        cardModel.getOnCardDismissedListener().onDislike(cardModel);
+                    }
+                    else if (targetY < 0 && (targetX < 1000 && targetX > -1000)) {
+                        cardModel.getOnCardDismissedListener().onUp(cardModel);
+                    }
+                    else if (targetY > 0 && (targetX < 700 && targetX > -700)) {
+                        cardModel.getOnCardDismissedListener().onDown(cardModel);
+                    }
+                    else {
+                        topCard.animate()
+                                .setDuration(duration)
+                                .setInterpolator(new DecelerateInterpolator())
+                                .translationX(0)
+                                .translationY(0)
+                                .rotation(0);
+                        return true;
                 }
-
+            }
                 topCard.animate()
                         .setDuration(duration)
                         .alpha(.75f)
